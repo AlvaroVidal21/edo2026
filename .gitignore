@@ -1,0 +1,52 @@
+# Bitácora EDO. Los documentos de trabajo (carga DISEL, TDR, informes)
+# viven fuera de este repo, en la carpeta EDO-MTPE.
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.directory
+*.swp
+*~
+.idea/
+.vscode/
+*.code-workspace
+
+# Secretos
+.env
+.env.*
+!.env.example
+
+# Carga y directorio real de empresas (teléfonos, correos, razón social)
+/data/
+/datos/
+/*.xlsx
+/*.xls
+/*.xlsm
+/*.csv
+/*.pdf
+/*.docx
+
+# Exportaciones del supervisor y evidencia para el informe
+/exports/
+/exportaciones/
+/evidencias/
+/anexos/
+/uploads/
+/media/
+
+# Base local de la bitácora
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Entorno y build, cuando exista la app
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+node_modules/
+dist/

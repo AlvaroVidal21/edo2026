@@ -443,12 +443,19 @@ La tabla principal del Directorio debe mostrar estas columnas:
 - RUC;
 - Nombre de contacto;
 - Teléfono de contacto;
+- WhatsApp (enlace para abrir el chat);
 - Correo de contacto;
 - Situación de Empresa;
 - Estado de Contacto;
 - Correo confirmado.
 
 Para cada empresa se muestran los datos del informante principal. Los demás datos pueden permanecer en el registro y mostrarse en la ficha de detalle, pero no como columnas adicionales de la tabla principal.
+
+### RN-042 — WhatsApp abre un chat sin enviar mensajes
+
+El Directorio debe ofrecer un enlace de WhatsApp derivado del teléfono del informante principal. El enlace debe usar el formato `https://wa.me/<número>` y contener únicamente dígitos en formato internacional. Para un celular peruano de nueve dígitos registrado en formato local, se antepone el código de país 51; si ya contiene el código internacional 51, no se duplica. Si no se cuenta con un teléfono utilizable, no se muestra un enlace activo.
+
+El enlace únicamente abre el chat asociado al número. No redacta ni envía mensajes por cuenta del usuario; el envío se realiza manualmente desde WhatsApp. Abrir el enlace no registra por sí solo una actividad: la gestión debe anotarse en la vista Actividades cuando ocurra.
 
 ## 17. Principios de Negocio del Sistema
 

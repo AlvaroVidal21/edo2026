@@ -87,6 +87,12 @@ Indicador asociado al correo de un contacto que señala si este fue confirmado. 
 
 ---
 
+### Acceso a WhatsApp
+
+Enlace derivado del teléfono del informante que permite abrir un chat de WhatsApp. El enlace usa el formato `https://wa.me/<número>` con el número internacional compuesto únicamente por dígitos. Para un celular peruano registrado en formato local de nueve dígitos se antepone el código de país 51; si el número ya incluye ese código, no se duplica. Si no hay un teléfono utilizable, no se genera un enlace activo. El enlace facilita abrir el chat, pero no envía mensajes automáticamente.
+
+---
+
 ### Actividad
 
 Gestión realizada por el Crítico Verificador relacionada con una empresa.
@@ -132,7 +138,7 @@ Ejemplos:
 - asesoría;
 - investigación;
 - coordinación;
-- incidencia.
+- Gestión de incidencia (llamada, correo, investigación o consulta realizada para atenderla).
 
 ---
 

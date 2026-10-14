@@ -31,8 +31,7 @@ El uso de múltiples canales dificulta mantener una visión clara de:
 - cuándo fue la última gestión;
 - qué acciones se realizaron;
 - qué consultas o incidencias existen;
-- cuál es el estado actual de cada empresa;
-- qué acción debe realizarse después.
+- cuál es el estado actual de cada empresa.
 
 La aplicación debe permitir conservar un historial cronológico y consultable de todas estas gestiones.
 
@@ -131,7 +130,7 @@ Datos básicos considerados inicialmente:
 - Correo electrónico
 - Teléfono o celular
 
-La tabla principal del Directorio mostrará únicamente: RUC, Nombre de contacto, Teléfono de contacto, Correo de contacto, Situación de Empresa, Estado de Contacto y Correo confirmado. Los datos de contacto corresponden al informante principal; los demás datos de la empresa y sus contactos se consultan en el detalle.
+La tabla principal del Directorio mostrará únicamente: RUC, Nombre de contacto, Teléfono de contacto, WhatsApp, Correo de contacto, Situación de Empresa, Estado de Contacto y Correo confirmado. Los datos de contacto corresponden al informante principal; los demás datos de la empresa y sus contactos se consultan en el detalle. WhatsApp abre el chat del número y el usuario envía el mensaje manualmente.
 
 La Situación de Empresa se actualizará diariamente descargando del aplicativo interno la carga asignada y cruzándola con el Directorio por RUC. El Estado de Contacto y la confirmación del correo se registran para cada informante.
 

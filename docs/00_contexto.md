@@ -131,6 +131,10 @@ Datos básicos considerados inicialmente:
 - Correo electrónico
 - Teléfono o celular
 
+La tabla principal del Directorio mostrará únicamente: RUC, Nombre de contacto, Teléfono de contacto, Correo de contacto, Situación de Empresa, Estado de Contacto y Correo confirmado. Los datos de contacto corresponden al informante principal; los demás datos de la empresa y sus contactos se consultan en el detalle.
+
+La Situación de Empresa se actualizará diariamente descargando del aplicativo interno la carga asignada y cruzándola con el Directorio por RUC. El Estado de Contacto y la confirmación del correo se registran para cada informante.
+
 Cada empresa tendrá dos estados independientes.
 
 ### Estado de Encuesta
@@ -152,13 +156,34 @@ Estados iniciales:
 
 - Sin iniciar
 - En análisis
-- Con incidencia
 - Validada / Cerrada
 
-Estos estados son independientes.
+La incidencia no es un valor del Estado de Encuesta ni del Estado de Crítica. Una empresa puede tener incidencias abiertas de seguimiento, de crítica o de ambos ámbitos, independientemente de sus dos estados. Los indicadores se calcularán y mostrarán por separado según el ámbito de la incidencia.
 
 Ejemplo:
 
 ```text
 Estado de Encuesta: Encuesta finalizada
 Estado de Crítica: En análisis
+Incidencias de seguimiento abiertas: 1
+Incidencias de crítica abiertas: 2
+```
+
+Las incidencias tendrán ciclo de vida propio: Abierta, En gestión y Resuelta. Al resolver una incidencia se registrarán su fecha de cierre y un resumen de cómo se atendió; su historial se conservará. Las incidencias de crítica se vincularán al caso de crítica específico que las originó.
+
+### 6.2 Sección de Sustento de Crítica
+
+Cada caso de crítica identificará el registro concreto de la encuesta que se analiza. Para ocupaciones, se vinculará con una ocupación específica del formulario 3.2 y podrá conservar como evidencia la descripción de tareas, el nivel educativo, el CIIU y la remuneración pertinentes. Toda decisión deberá incluir una justificación; para una validación podrá ser breve y explicar por qué se mantiene el valor original.
+
+### Respaldo de la información
+
+La aplicación permitirá generar y restaurar copias locales de la base de datos. Cada copia identificará su fecha de generación y conservará los registros necesarios para recuperar la trazabilidad.
+
+### Distribución de incidencias entre las vistas
+
+| Vista | Incidencias que presenta |
+| --- | --- |
+| Dashboard | Totales de incidencias abiertas separados entre seguimiento de encuesta y crítica. |
+| Directorio | Indicadores por empresa para cada ámbito, calculados desde sus incidencias. |
+| Actividades | Gestiones operativas y actividades relacionadas con incidencias de seguimiento. |
+| Sustento de Crítica | Incidencias vinculadas a casos de crítica, su evidencia, estado y forma de resolución. |

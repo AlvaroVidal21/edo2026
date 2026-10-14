@@ -34,6 +34,8 @@ Sobre una empresa pueden realizarse:
 - registro de incidencias;
 - procesos de crítica y validación.
 
+La empresa tiene una **Situación de Empresa** obtenida del aplicativo interno mediante la descarga diaria de la carga asignada y el cruce por RUC. Esta clasificación institucional es distinta del Estado de Encuesta, del Estado de Crítica y del Estado de Contacto.
+
 ---
 
 ### Informante
@@ -48,6 +50,40 @@ Generalmente corresponde a personal que conoce la política de recursos humanos 
 - otro funcionario autorizado.
 
 Una empresa puede contar con un informante principal y otros contactos de apoyo.
+
+Para el Directorio, el contacto principal aporta el nombre, teléfono y correo que se muestran en la tabla. Cada contacto puede tener un Estado de Contacto y una confirmación de correo propios.
+
+---
+
+### Situación de Empresa
+
+Clasificación de la empresa obtenida del aplicativo interno. Se actualiza a partir de la descarga diaria de las empresas asignadas y su cruce por RUC. Su catálogo codificado es:
+
+- 1 — Completado
+- 2 — Fusionada/Absorbida
+- 3 — Paralizada
+- 4 — Liquidada
+- 5 — De baja
+- 6 — Suspensión temporal
+- 7 — Empresas del Estado
+- 8 — No ingresó al aplicativo a gestionar la encuesta
+- 9 — Se negó a dar información (rechazo)
+- 10 — No ubicada
+- 11 — En proceso: quedó pendiente de terminar; pese a la insistencia, nunca terminó.
+
+Esta clasificación describe la situación reportada por el aplicativo interno y no reemplaza los estados operativos que mantiene la bitácora.
+
+---
+
+### Estado de Contacto
+
+Situación de la gestión de contacto con una persona informante. Sus valores son: Pendiente, Contactado, No contesta y Número incorrecto.
+
+---
+
+### Correo confirmado
+
+Indicador asociado al correo de un contacto que señala si este fue confirmado. Sus valores son Sí y No.
 
 ---
 
@@ -94,7 +130,6 @@ Ejemplos:
 - seguimiento;
 - consulta;
 - asesoría;
-- recordatorio;
 - investigación;
 - coordinación;
 - incidencia.
@@ -112,6 +147,8 @@ Puede presentarse, por ejemplo, cuando:
 - se requiere confirmación adicional;
 - aparece un problema durante el llenado o validación de la encuesta.
 
+Cada incidencia pertenece a uno de dos ámbitos: Seguimiento de encuesta o Crítica. Las de seguimiento se asocian a la gestión operativa de la empresa; las de crítica se asocian al caso específico que afectan. Ambas tienen un ciclo de vida independiente de los estados de la empresa: Abierta, En gestión o Resuelta. Al resolverla, se registra la fecha de cierre y cómo se atendió, conservando el historial.
+
 ---
 
 ### Crítica
@@ -121,6 +158,8 @@ Proceso de revisión y control de calidad de la información registrada en la en
 Durante la crítica, el Crítico Verificador analiza la coherencia de los datos y verifica que las variables sujetas a codificación o consistencia estén correctamente registradas.
 
 La crítica puede producir una validación o una recodificación.
+
+Cada caso de crítica se vincula con el registro específico de la encuesta que se analiza. En el caso de una ocupación, se refiere a una ocupación concreta del formulario 3.2. Cuando sea pertinente, el caso conserva el contexto utilizado como evidencia: tareas, nivel educativo, CIIU y remuneración.
 
 ---
 
@@ -175,6 +214,8 @@ El sustento puede incluir:
 
 Su finalidad es conservar trazabilidad sobre el motivo de una validación o recodificación.
 
+Toda decisión debe tener una justificación. Para una validación, basta una explicación concisa de por qué se mantiene el valor original; para una recodificación, debe explicar el cambio realizado.
+
 ---
 
 ### Estado de Encuesta
@@ -190,6 +231,14 @@ Representa el avance de la empresa dentro de la etapa de recolección de informa
 Situación en la que se encuentra una empresa dentro del proceso posterior de revisión, consistencia y validación.
 
 Es independiente del Estado de Encuesta.
+
+No incluye un estado “Con incidencia”. Tampoco se agrega “Con incidencia” al Estado de Encuesta. La presencia de incidencias abiertas se deriva de sus registros y se calcula por ámbito.
+
+---
+
+### Respaldo local
+
+Copia recuperable de la base de datos guardada localmente, con fecha identificable y con los registros necesarios para restaurar la información y su trazabilidad.
 
 ---
 
@@ -210,7 +259,11 @@ DISEL
               ▼
           [EMPRESA]
               │
+              ├── tiene situación institucional actualizada por RUC
+              │
               ├── tiene ──> [INFORMANTES]
+              │                 ├── Estado de Contacto
+              │                 └── Correo confirmado
               │
               ├── genera ──> [ACTIVIDADES]
               │                 │
@@ -218,8 +271,13 @@ DISEL
               │                 └── tiene ──> [CATEGORÍA]
               │
               ├── puede presentar ──> [INCIDENCIAS]
+              │                         ├── ámbito: seguimiento o crítica
+              │                         └── tienen estado, fecha de cierre y resolución
               │
               └── entra a ──> [CRÍTICA]
+                                 │
+                                 ├── contiene casos vinculados a registros concretos de la encuesta
+                                 │     └── pueden tener incidencias asociadas
                                  │
                                  ├── produce ──> [VALIDACIÓN]
                                  │

@@ -22,7 +22,8 @@ El crítico debe gestionar una carga de empresas y mantener contacto con ellas m
 - WhatsApp
 - Correo electrónico
 - Llamadas
-- Atención presencial
+- Reunión virtual
+
 
 El uso de múltiples canales dificulta mantener una visión clara de:
 
@@ -61,7 +62,6 @@ Construir una aplicación local que permita al Crítico Verificador:
 - controlar su carga de empresas;
 - registrar actividades de seguimiento;
 - conocer rápidamente el estado de cada empresa;
-- identificar pendientes;
 - documentar incidencias;
 - registrar y sustentar decisiones de crítica y recodificación;
 - generar información exportable;
@@ -83,7 +83,6 @@ Puede:
 - registrar y actualizar contactos;
 - registrar actividades;
 - modificar estados;
-- registrar pendientes;
 - documentar incidencias;
 - registrar análisis y sustentos de crítica;
 - consultar el dashboard;
@@ -151,7 +150,7 @@ Representa el avance del proceso posterior de revisión y validación.
 
 Estados iniciales:
 
-- Pendiente
+- Sin iniciar
 - En análisis
 - Con incidencia
 - Validada / Cerrada

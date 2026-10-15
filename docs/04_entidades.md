@@ -4,7 +4,7 @@
 
 Definir las entidades principales del sistema, sus atributos y relaciones antes de diseñar las tablas físicas en PostgreSQL.
 
-El modelo debe permitir que ciertos catálogos, como medios y categorías de actividad, puedan administrarse desde la aplicación.
+`Medio` y `Categoría de actividad` son entidades de catálogo: cada una tendrá su propia tabla secundaria en PostgreSQL y las actividades las referenciarán mediante claves foráneas. Sus opciones se podrán administrar desde la aplicación.
 
 ## 2. Empresa
 
@@ -163,6 +163,10 @@ Son conceptos independientes:
 - **Medio:** responde a «¿cómo se realizó la actividad?».
 - **Categoría:** responde a «¿qué tipo de gestión se realizó?».
 
+Ambas son tablas secundarias de catálogo, no columnas de texto repetidas en `Actividad`. Cada actividad tiene un solo medio y una sola categoría, seleccionados desde listas desplegables de selección única. No se usarán casillas de verificación, porque no se eligen varios valores para una misma actividad.
+
+La aplicación permitirá agregar, editar y desactivar opciones. Si una opción ya está referenciada por actividades, no se eliminará físicamente. Si cambia el significado de una opción, se desactivará y se agregará otra para no alterar el sentido de los registros históricos; la edición se reservará para corregir o aclarar su nombre o descripción.
+
 ### Ejemplo
 
 | Campo | Valor |
@@ -258,7 +262,7 @@ No se define todavía como entidad independiente. Su diseño se evaluará poster
 - Actividad
 - Crítica
 
-### Catálogos administrables
+### Entidades de catálogo administrables
 
 - Medio
 - Categoría de actividad
@@ -276,3 +280,42 @@ Actividad
 - medio_id -> Medio
 - categoria_id -> CategoriaActividad
 ```
+
+## 11. Relaciones SQL en PostgreSQL
+
+Se usarán los nombres `empresa`, `actividad`, `critica`, `medio` y `categoria_actividad` para las tablas. Cada tabla tendrá `id` como clave primaria; las columnas que la referencien deberán tener un tipo compatible.
+
+| Tabla | Clave foránea | Referencia | Relación |
+| --- | --- | --- | --- |
+| `actividad` | `empresa_id` | `empresa.id` | Una empresa puede tener muchas actividades. |
+| `actividad` | `medio_id` | `medio.id` | Un medio puede utilizarse en muchas actividades. |
+| `actividad` | `categoria_id` | `categoria_actividad.id` | Una categoría puede utilizarse en muchas actividades. |
+| `critica` | `empresa_id` | `empresa.id` | Una empresa puede tener muchos casos de crítica. |
+
+El siguiente SQL define las relaciones para cuando se creen las tablas y sus columnas:
+
+```sql
+ALTER TABLE actividad
+    ALTER COLUMN empresa_id SET NOT NULL,
+    ALTER COLUMN medio_id SET NOT NULL,
+    ALTER COLUMN categoria_id SET NOT NULL,
+    ADD CONSTRAINT actividad_empresa_fk
+        FOREIGN KEY (empresa_id) REFERENCES empresa (id)
+        ON DELETE RESTRICT,
+    ADD CONSTRAINT actividad_medio_fk
+        FOREIGN KEY (medio_id) REFERENCES medio (id)
+        ON DELETE RESTRICT,
+    ADD CONSTRAINT actividad_categoria_fk
+        FOREIGN KEY (categoria_id) REFERENCES categoria_actividad (id)
+        ON DELETE RESTRICT;
+
+ALTER TABLE critica
+    ALTER COLUMN empresa_id SET NOT NULL,
+    ADD CONSTRAINT critica_empresa_fk
+        FOREIGN KEY (empresa_id) REFERENCES empresa (id)
+        ON DELETE RESTRICT;
+```
+
+Las relaciones son obligatorias para cada actividad y caso de crítica. `ON DELETE RESTRICT` impide eliminar una empresa, medio o categoría mientras tenga registros relacionados, conservando su historial.
+
+Los contactos permanecen como atributos de `empresa`. Para recodificar su cargo, el caso de crítica utiliza `empresa_id` y una `variable_analizada` específica, como `contacto_principal_cargo` o `contacto_alternativo_cargo`, conservando el texto informado en `valor_original` y el código asignado en `valor_resultante`. No se requiere una clave foránea de contacto ni una relación directa entre `actividad` y `critica`.

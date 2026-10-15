@@ -1,0 +1,38 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Bitácora EDO 2026{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'bitacora/css/app.css' %}">
+  <script src="{% static 'htmx.org/dist/htmx.min.js' %}" defer></script>
+  <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}" defer></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="app-body">
+  <nav class="navbar navbar-expand-lg app-navbar sticky-top">
+    <div class="container-fluid app-container">
+      <a class="navbar-brand fw-semibold" href="{% url 'bitacora:dashboard' %}"><span class="brand-mark">E</span> Bitácora EDO <span class="text-secondary fw-normal">2026</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <div class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'bitacora:dashboard' %}">Dashboard</a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'directorio' or 'empresa_' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'bitacora:directorio' %}">Directorio</a>
+          <a class="nav-link {% if 'actividad' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'bitacora:actividades' %}">Actividades</a>
+          <a class="nav-link {% if 'critica' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'bitacora:criticas' %}">Sustento de crítica</a>
+          <a class="btn btn-primary btn-sm ms-lg-2" href="{% url 'bitacora:empresa_nueva' %}">+ Empresa</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="container-fluid app-container py-4">
+    {% if demo_mode %}<div class="alert alert-warning d-flex flex-wrap align-items-center justify-content-between gap-2 py-2" role="status"><span><strong>Demostración · tres días de trabajo.</strong> Gestiones y estados simulados sobre el directorio de la carga.</span><a class="alert-link" href="{{ real_app_url }}">Ver bitácora real ↗</a></div>{% endif %}
+    {% if messages %}<div class="messages mb-3">{% for message in messages %}<div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show py-2" role="alert">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button></div>{% endfor %}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="app-footer"><div class="container-fluid app-container">Bitácora operativa · EDO 2026</div></footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

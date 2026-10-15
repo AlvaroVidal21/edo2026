@@ -13,10 +13,11 @@ Definir el stack tecnológico seleccionado para la **Bitácora Laboral y Sustent
 | **Base de Datos** | **PostgreSQL** (con driver `psycopg` v3) | Integridad referencial estricta (`ON DELETE RESTRICT`), soporte nativo para restricciones complejas (`CHECK`), búsqueda por trigramas (`pg_trgm`) y base para clasificadores futuros (`pgvector`). Requisito no negociable. |
 | **Lenguaje** | **Python 3.12+** | Ecosistema óptimo para manipulación de datos tabulares (Excel/CSV), procesamiento analítico y clasificadores asistidos (fase 2). |
 | **Framework Backend** | **Django 5.x** | Integración nativa con PostgreSQL (ORM maduro con `CheckConstraint` y `on_delete=PROTECT`), sistema de migraciones robusto, formularios/validaciones del lado del servidor y panel administrativo integrado para catálogos. |
-| **Interfaz / Frontend** | **Plantillas Django + HTMX + Alpine.js** | Interactividad moderna (filtros en vivo, modales, edición inline) sin la complejidad, sobrecarga de sincronización ni mantenimiento de una SPA separada (React). |
-| **Diseño / UI** | **Bootstrap 5** o **Pico CSS** | Interfaz limpia, responsiva y orientada a formularios y tablas de densidad de datos alta, sin requerir pipelines de estilos complejos. |
+| **Interfaz / Frontend** | **Plantillas Django + HTMX** | Interactividad suficiente (filtros, formularios parciales) sin mantener una SPA separada. Alpine.js queda como opción si una interacción concreta lo requiere. |
+| **Diseño / UI** | **Bootstrap 5** | Interfaz responsiva y orientada a formularios y tablas de alta densidad, con estilos servidos localmente desde npm. |
 | **Visualización** | **Chart.js** | Ligero y directo para los indicadores y métricas del Dashboard de Supervisión. |
 | **Manejo de Datos** | **openpyxl** + **pandas** | Cruce diario por RUC con la carga institucional y exportación estructurada a Excel/CSV. |
+| **Gestor de Paquetes / Entorno** | **uv** | Resolución y sincronización ultra-rápida de dependencias con `pyproject.toml` y lockfiles reproducibles. |
 | **Trazabilidad / Auditoría** | **django-simple-history** | Registro automático de versiones previas en validaciones y recodificaciones (RN-017, RN-020, RN-032). |
 | **Clasificación Asistida (Fase 2)** | **rapidfuzz** + búsqueda vectorial local | Sugerencia de códigos (CIIU, CNO) ejecutada 100% en local sin exponer datos sensibles a APIs externas (RN-034, RN-035). |
 
@@ -35,7 +36,7 @@ PostgreSQL es el motor relacional central y no negociable del sistema.
   - `pg_trgm`: Búsquedas difusas sobre razones sociales o descripciones con errores tipográficos.
   - `pgvector` (proyección): Almacenamiento y búsqueda por similitud de descripciones de puestos vs. clasificadores oficiales (CNO 2015, CIIU Rev. 4) en la etapa de crítica asistida.
 - **Respaldo y Recuperación Local (RN-038):**
-  - Se implementan utilitarios/comandos (`manage.py respaldar` / `manage.py restaurar`) basados en `pg_dump -Fc` y `pg_restore --clean`, permitiendo generar respaldos portables con marca temporal elegidos por el usuario.
+  - Se implementan comandos (`manage.py respaldar_db` / `manage.py restaurar_db`) basados en `pg_dump -Fc` y `pg_restore --clean`, permitiendo generar respaldos portables con marca temporal elegidos por el usuario.
 - **Seguridad local (RN-034):**
   - Configurado en `listen_addresses = 'localhost'`, sin exposición en red externa.
 
@@ -59,7 +60,7 @@ Se evaluó la alternativa de una arquitectura desacoplada (FastAPI/Django REST +
 3. **Mantenimiento y arranque simplificados:**
    - No requiere compilar bundles (`npm run build`, Vite), ni gestionar dos servidores de desarrollo en simultáneo. Un único comando levanta todo el entorno.
 4. **Interactividad suficiente:**
-   - Las necesidades interactivas (filtrado reactivo de tablas en el Directorio, actualización de estados sin recargar página completa, apertura de modales para registro de actividad y enlaces directos de WhatsApp) se resuelven de forma limpia mediante atributos HTMX (`hx-get`, `hx-post`, `hx-target`, `hx-swap`).
+   - Las necesidades interactivas (filtrado reactivo de tablas en el Directorio, actualización de estados sin recargar página completa, apertura de modales para registro de actividad y enlaces directos de WhatsApp) se resuelven de forma limpia mediante atributos HTMX (`hx-get`, `hx-post`, `hx-target`, `hx-swap`). Los recursos de Bootstrap, HTMX y Chart.js se sirven localmente.
 
 ### 3.4 Resguardo y Trazabilidad: django-simple-history
 

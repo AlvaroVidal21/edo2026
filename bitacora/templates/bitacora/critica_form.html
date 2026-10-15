@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Nuevo caso de crítica · Bitácora EDO{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">SUSTENTO DE CRÍTICA</p><h1>Nuevo caso</h1><p class="text-secondary mb-0">Vincula el análisis con la empresa y el registro concreto revisado.</p></div><a href="{% url 'bitacora:criticas' %}" class="btn btn-light">Cancelar</a></div>
+<form method="post" class="panel-card form-card">{% csrf_token %}{% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}<div class="form-grid">{% for field in form %}{% include "bitacora/partials/form_field.html" %}{% endfor %}</div><div class="form-actions"><a class="btn btn-light" href="{% url 'bitacora:criticas' %}">Cancelar</a><button class="btn btn-primary" type="submit">Guardar caso</button></div></form>
+{% endblock %}

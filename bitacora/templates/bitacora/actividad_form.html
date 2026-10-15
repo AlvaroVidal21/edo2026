@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Registrar actividad · Bitácora EDO{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">GESTIONES CON EMPRESAS</p><h1>Registrar actividad</h1><p class="text-secondary mb-0">Una actividad describe una gestión realizada, no una tarea futura.</p></div><a href="{% url 'bitacora:actividades' %}" class="btn btn-light">Cancelar</a></div>
+<form method="post" class="panel-card form-card">{% csrf_token %}{% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}<div class="form-grid">{% for field in form %}{% include "bitacora/partials/form_field.html" %}{% endfor %}</div><div class="form-actions"><a class="btn btn-light" href="{% url 'bitacora:actividades' %}">Cancelar</a><button class="btn btn-primary" type="submit">Guardar actividad</button></div></form>
+{% endblock %}

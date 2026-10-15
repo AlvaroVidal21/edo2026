@@ -1,0 +1,49 @@
+{% extends "base.html" %}{% load static %}
+{% block title %}Dashboard · Bitácora EDO{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">VISTA GENERAL{% if demo_mode %} · PRIMER ENTREGABLE{% endif %}</p><h1>Seguimiento de la carga</h1><p class="text-secondary mb-0">{% if periodo.desde %}Gestiones del {{ periodo.desde|date:"d/m/Y" }} al {{ periodo.hasta|date:"d/m/Y" }}.{% else %}Empresas asignadas, contacto y crítica.{% endif %}</p></div><a class="btn btn-outline-primary" href="{% url 'bitacora:actividad_nueva' %}">Registrar actividad</a></div>
+<section class="row g-3 mb-3" aria-label="Indicadores">
+  <div class="col-6 col-xl"><article class="metric-card"><span>Empresas asignadas</span><strong>{{ empresa_count }}</strong><small>carga recibida</small></article></div>
+  <div class="col-6 col-xl"><article class="metric-card"><span>Con alguna gestión</span><strong>{{ gestionadas_count }}</strong><small>empresas distintas</small></article></div>
+  <div class="col-6 col-xl"><article class="metric-card"><span>Contacto efectivo</span><strong>{{ contactadas_count }}</strong><small>{{ contactadas_porcentaje|floatformat:1 }} % de la carga</small></article></div>
+  <div class="col-6 col-xl"><article class="metric-card"><span>Con asistencia técnica</span><strong>{{ asistencia_count }}</strong><small>empresas con asesoría</small></article></div>
+  <div class="col-6 col-xl"><article class="metric-card"><span>Casos abiertos de crítica</span><strong>{{ criticas_abiertas_count }}</strong><small>pendientes de validación</small></article></div>
+  <div class="col-6 col-xl"><article class="metric-card"><span>Sin correo disponible</span><strong>{{ empresas_sin_correo_count }}</strong><small>completar directorio</small></article></div>
+</section>
+<div class="alert alert-light border py-2 small">Fuentes del directorio: <strong>{{ con_correo_count }}</strong> empresas con correo · <strong>{{ con_telefono_count }}</strong> con teléfono · <strong>{{ con_nombre_count }}</strong> con nombre de informante. Contactos históricos sujetos a confirmación. Encuestas finalizadas: <strong>{{ encuestas_finalizadas_count }}</strong>.</div>
+<div class="row g-3">
+  <div class="col-12 col-xl-7"><section class="panel-card h-100"><div class="panel-heading"><div><h2>Avance de contacto</h2><p>Cada empresa se cuenta una sola vez.</p></div><a href="{% url 'bitacora:directorio' %}" class="small">Ver directorio</a></div>
+    {% if empresa_count %}<div class="chart-wrap"><canvas id="progress-chart" aria-label="Distribución de empresas por avance de contacto" role="img"></canvas></div>
+    <div class="table-responsive mt-3"><table class="table table-sm mb-0"><thead><tr><th>Situación de seguimiento</th><th class="text-end">Empresas</th><th class="text-end">% de carga</th></tr></thead><tbody>{% for item in reporte %}<tr><td>{{ item.label }}</td><td class="text-end">{{ item.total }}</td><td class="text-end">{{ item.porcentaje|floatformat:1 }} %</td></tr>{% endfor %}</tbody><tfoot><tr><th>Total asignado</th><th class="text-end">{{ empresa_count }}</th><th class="text-end">100,0 %</th></tr></tfoot></table></div>
+    {% else %}<p class="empty-state">Aún no hay empresas. Agrega una para iniciar el seguimiento.</p>{% endif %}
+  </section></div>
+  <div class="col-12 col-xl-5"><section class="panel-card h-100"><div class="panel-heading"><div><h2>Gestiones recientes</h2><p>{{ actividad_count }} actividades · {{ gestionadas_count }} empresas</p></div><a href="{% url 'bitacora:actividades' %}" class="small">Ver todas</a></div>
+    <div class="d-flex flex-wrap gap-2 mb-2">{% for medio in actividades_por_medio %}<span class="badge bg-light text-dark border">{{ medio.medio__nombre }}: {{ medio.total }}</span>{% endfor %}</div>
+    {% for actividad in ultimas_actividades %}<a class="feed-item" href="{% url 'bitacora:empresa_detalle' actividad.empresa_id %}"><span class="feed-icon">{{ actividad.medio.nombre|slice:":1" }}</span><span class="feed-copy"><strong>{{ actividad.categoria }} · {{ actividad.medio }}</strong><small>{{ actividad.empresa.razon_social }} · {{ actividad.fecha|date:"d/m" }}</small></span></a>{% empty %}<p class="empty-state">Todavía no se registraron actividades.</p>{% endfor %}
+  </section></div>
+</div>
+<section class="panel-card mt-3"><div class="panel-heading"><div><h2>Empresas sin correo disponible</h2><p>Sin correo recuperable tras consultar todas las fuentes de la carga.</p></div><a href="{% url 'bitacora:directorio' %}" class="small">Ver directorio</a></div>
+  <div class="table-responsive"><table class="table table-hover table-sm align-middle mb-0"><thead><tr><th>RUC</th><th>Empresa</th><th>Contacto</th><th>Acción</th></tr></thead><tbody>{% for empresa in empresas_sin_correo %}<tr><td>{{ empresa.ruc }}</td><td>{{ empresa.razon_social }}</td><td>{{ empresa.contacto_principal_nombre|default:"Sin registrar" }}</td><td><a href="{% url 'bitacora:empresa_editar' empresa.pk %}">Completar correo</a></td></tr>{% empty %}<tr><td colspan="4" class="text-center text-secondary py-4">Todas las empresas tienen correo disponible.</td></tr>{% endfor %}</tbody></table></div>
+</section>
+<section class="panel-card mt-3"><div class="panel-heading"><div><h2>Sustentos recientes</h2><p>Casos de crítica y su revisión.</p></div><a href="{% url 'bitacora:criticas' %}" class="small">Ir a sustento de crítica</a></div>
+  <div class="table-responsive"><table class="table table-hover table-sm align-middle mb-0"><thead><tr><th>Empresa</th><th>Variable</th><th>Tipo</th><th>Revisión</th><th>Fecha</th></tr></thead><tbody>{% for critica in ultimas_criticas %}<tr><td><a href="{% url 'bitacora:empresa_detalle' critica.empresa_id %}">{{ critica.empresa.razon_social }}</a></td><td>{{ critica.variable_analizada }}</td><td>{{ critica.get_tipo_resultado_display|default:"Pendiente" }}</td><td>{{ critica.get_estado_revision_display }}</td><td>{{ critica.creado_en|date:"d/m/Y" }}</td></tr>{% empty %}<tr><td colspan="5" class="text-center text-secondary py-4">Aún no hay casos de crítica.</td></tr>{% endfor %}</tbody></table></div>
+</section>
+<details class="panel-card mt-3"><summary class="fw-semibold">Situación institucional del archivo</summary><p class="small text-secondary mt-2">La clasificación institucional es independiente del avance de contacto.</p>
+  {% if situaciones %}<div class="chart-wrap"><canvas id="situation-chart" aria-label="Empresas por situación institucional" role="img"></canvas></div>{% endif %}
+  {% if codigo_cero_count %}<p class="small text-secondary mt-3 mb-0">{{ codigo_cero_count }} empresas traen código de situación <strong>0</strong>, sin equivalencia definida en el catálogo. Este dato no implica ausencia de contactos.</p>{% endif %}
+</details>
+{% endblock %}
+{% block scripts %}<script src="{% static 'chart.js/dist/chart.umd.js' %}"></script>{{ situaciones_chart|json_script:"situation-data" }}{{ reporte_chart|json_script:"progress-data" }}<script>
+function drawBars(canvasId, dataId, colors) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const data = JSON.parse(document.getElementById(dataId).textContent);
+  return new Chart(canvas, {type:"bar",data:{labels:data.labels,datasets:[{data:data.values,backgroundColor:colors,borderRadius:4,maxBarThickness:28}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}},y:{grid:{display:false}}}}});
+}
+drawBars("progress-chart", "progress-data", ["#167d86", "#b8892d", "#608eaa", "#adb5bd"]);
+let institutionChart;
+const institutionDetails = document.getElementById("situation-chart")?.closest("details");
+institutionDetails?.addEventListener("toggle", () => {
+  if (institutionDetails.open && !institutionChart) institutionChart = drawBars("situation-chart", "situation-data", "#608eaa");
+});
+</script>{% endblock %}

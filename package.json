@@ -1,0 +1,11 @@
+{
+  "name": "bitacora-edo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Assets locales para la interfaz de Bitácora EDO 2026",
+  "dependencies": {
+    "bootstrap": "5.3.8",
+    "chart.js": "^4.5.1",
+    "htmx.org": "2.0.4"
+  }
+}

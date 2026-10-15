@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }} · Bitácora EDO{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">DIRECTORIO</p><h1>{{ page_title }}</h1><p class="text-secondary mb-0">Los datos de contacto se guardan como atributos de la empresa.</p></div><a href="{% if empresa %}{% url 'bitacora:empresa_detalle' empresa.pk %}{% else %}{% url 'bitacora:directorio' %}{% endif %}" class="btn btn-light">Cancelar</a></div>
+<form method="post" class="panel-card form-card">{% csrf_token %}{% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+  <fieldset><legend>Identificación de la empresa</legend><div class="form-grid">{% for field in form %}{% if field.name in "ruc razon_social region ciiu" %}{% include "bitacora/partials/form_field.html" %}{% endif %}{% endfor %}</div></fieldset>
+  <fieldset><legend>Contacto principal</legend><div class="form-grid">{% for field in form %}{% if field.name|slice:":18" == "contacto_principal" %}{% include "bitacora/partials/form_field.html" %}{% endif %}{% endfor %}</div></fieldset>
+  <fieldset><legend>Contacto alternativo <span class="optional-label">Opcional</span></legend><div class="form-grid">{% for field in form %}{% if field.name|slice:":20" == "contacto_alternativo" %}{% include "bitacora/partials/form_field.html" %}{% endif %}{% endfor %}</div></fieldset>
+  <fieldset><legend>Seguimiento</legend><div class="form-grid">{% for field in form %}{% if field.name == "situacion_empresa" or field.name == "estado_encuesta" or field.name == "estado_critica" %}{% include "bitacora/partials/form_field.html" %}{% endif %}{% endfor %}</div></fieldset>
+  <div class="form-actions"><a class="btn btn-light" href="{% if empresa %}{% url 'bitacora:empresa_detalle' empresa.pk %}{% else %}{% url 'bitacora:directorio' %}{% endif %}">Cancelar</a><button class="btn btn-primary" type="submit">Guardar empresa</button></div>
+</form>
+{% endblock %}

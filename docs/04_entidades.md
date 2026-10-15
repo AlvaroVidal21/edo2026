@@ -22,7 +22,7 @@ Representa una empresa asignada al Crítico Verificador y constituye la entidad 
 
 ### Contacto principal
 
-El contacto principal es obligatorio.
+Los atributos del contacto principal se completan con las fuentes disponibles. Su nombre puede faltar si la carga solo contiene canales de contacto; no se inventará un informante.
 
 | Atributo | Descripción |
 | --- | --- |
@@ -44,11 +44,16 @@ El contacto alternativo es opcional.
 
 ### Seguimiento
 
-- `situacion_empresa`
-- `estado_contacto`
-- `correo_confirmado`
-- `estado_encuesta`
-- `estado_critica`
+- `situacion_empresa` y fecha del último cruce;
+- estado de contacto y correo confirmado para cada contacto registrado;
+- `estado_encuesta`;
+- `estado_critica`.
+
+### Procedencia de la carga
+
+`datos_carga` conserva como atributo JSON de Empresa los valores originales de las columnas, archivo, hoja y fila, los candidatos de contacto de cada fuente, los canales adicionales y la procedencia de cada atributo seleccionado. Los contactos siguen siendo atributos de Empresa; no se crea una entidad Contacto.
+
+La selección consulta Datos actualizados, Directorio base / envío EDO 2026, Planilla electrónica 2025, EDO 2025 (ambos informantes), EDO 2024 (ambos informantes) y SUNAFIL. Los encabezados repetidos se distinguen por bloque y columna. Los contactos históricos permanecen sin confirmar. Una recarga conserva las ediciones locales y los estados de gestión existentes.
 
 ### Relaciones
 
@@ -188,13 +193,18 @@ Una misma categoría puede utilizar diferentes medios y un mismo medio puede uti
 
 Representa la revisión de un dato registrado en la encuesta para determinar si debe mantenerse o recodificarse.
 
-Esta entidad pertenece a una empresa y será desarrollada con mayor detalle durante la implementación de la segunda etapa del sistema.
+Esta entidad pertenece a una empresa. `registro_referencia` identifica el caso concreto del formulario; para ocupaciones puede usarse el número de ocupación del formulario 3.2. Los campos de contexto permiten conservar las tareas, nivel educativo, CIIU y remuneración usados en el análisis.
 
 ### Atributos iniciales
 
 - `id`
 - `empresa_id`
 - `variable_analizada`
+- `registro_referencia`
+- `contexto_tareas`
+- `contexto_nivel_educativo`
+- `contexto_ciiu`
+- `contexto_remuneracion`
 - `valor_original`
 - `valor_resultante`
 - `tipo_resultado`

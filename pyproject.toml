@@ -1,0 +1,22 @@
+[project]
+name = "bitacora-edo"
+version = "0.1.0"
+description = "Bitácora Laboral y Sustento de Crítica EDO 2026 - MTPE"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.0",
+    "django-htmx>=1.17.0",
+    "python-dotenv>=1.0.0",
+    "pandas>=2.2.0",
+    "openpyxl>=3.1.2",
+    "psycopg[binary]>=3.1.18",
+    "django-simple-history>=3.7.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-django>=4.8.0",
+    "ruff>=0.4.0",
+]

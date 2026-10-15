@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Directorio · Bitácora EDO{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">EMPRESAS ASIGNADAS</p><h1>Directorio</h1><p class="text-secondary mb-0">Contacto, situación institucional y estado de seguimiento.</p></div><a href="{% url 'bitacora:empresa_nueva' %}" class="btn btn-primary">+ Agregar empresa</a></div>
+<section class="panel-card">
+  <form class="filter-bar" method="get" action="{% url 'bitacora:directorio' %}" hx-get="{% url 'bitacora:directorio' %}" hx-target="#directory-results" hx-push-url="true">
+    <div class="search-field"><label class="visually-hidden" for="directory-search">Buscar empresa</label><input id="directory-search" class="form-control" type="search" name="q" value="{{ query }}" placeholder="Buscar RUC, empresa o contacto" hx-get="{% url 'bitacora:directorio' %}" hx-trigger="keyup changed delay:300ms" hx-target="#directory-results" hx-include="closest form" hx-push-url="true"></div>
+    <select class="form-select" name="situacion" aria-label="Filtrar por situación"><option value="">Todas las situaciones</option>{% for value,label in situaciones %}<option value="{{ value }}" {% if situacion_seleccionada == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+    <select class="form-select" name="estado_contacto" aria-label="Filtrar por estado de contacto"><option value="">Todos los contactos</option>{% for value,label in estados_contacto %}<option value="{{ value }}" {% if estado_contacto_seleccionado == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+    <button class="btn btn-outline-secondary" type="submit">Filtrar</button>
+    <a class="btn btn-light" href="?{{ request.GET.urlencode }}&amp;export=xlsx">Excel</a><a class="btn btn-light" href="?{{ request.GET.urlencode }}&amp;export=csv">CSV</a>
+  </form>
+  <div id="directory-results">{% include "bitacora/partials/directorio_resultados.html" %}</div>
+</section>
+{% endblock %}

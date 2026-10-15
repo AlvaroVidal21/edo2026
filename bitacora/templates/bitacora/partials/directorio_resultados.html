@@ -1,0 +1,12 @@
+<div class="table-responsive"><table class="table table-hover align-middle data-table mb-0"><thead><tr><th>RUC</th><th>Nombre de contacto</th><th>Teléfono</th><th>WhatsApp</th><th>Correo de contacto</th><th>Situación de empresa</th><th>Estado de contacto</th><th>Correo confirmado</th><th></th></tr></thead><tbody>
+{% for empresa in empresas %}<tr>
+  <td><span class="text-mono">{{ empresa.ruc }}</span><a class="d-block small" href="{% url 'bitacora:empresa_detalle' empresa.pk %}">{{ empresa.razon_social }}</a></td>
+  <td>{{ empresa.contacto_principal_nombre }}{% if empresa.contacto_principal_cargo %}<small class="d-block text-secondary">{{ empresa.contacto_principal_cargo }}</small>{% endif %}</td>
+  <td>{% if empresa.contacto_principal_telefono %}{{ empresa.contacto_principal_telefono }}{% else %}<span class="text-secondary">—</span>{% endif %}</td>
+  <td>{% if empresa.whatsapp_url %}<a class="whatsapp-link" href="{{ empresa.whatsapp_url }}" target="_blank" rel="noopener" aria-label="Abrir WhatsApp de {{ empresa.razon_social }}">Abrir chat ↗</a>{% else %}<span class="text-secondary">—</span>{% endif %}</td>
+  <td>{% if empresa.contacto_principal_correo %}<a href="mailto:{{ empresa.contacto_principal_correo }}">{{ empresa.contacto_principal_correo }}</a>{% else %}<span class="text-secondary">—</span>{% endif %}</td>
+  <td>{{ empresa.get_situacion_empresa_display|default:"Sin dato" }}</td><td><span class="status-pill">{{ empresa.get_contacto_principal_estado_display }}</span></td>
+  <td>{% if empresa.contacto_principal_correo_confirmado %}<span class="text-success fw-semibold">Sí</span>{% else %}<span class="text-secondary">No</span>{% endif %}</td>
+  <td><a class="btn btn-sm btn-light" href="{% url 'bitacora:empresa_editar' empresa.pk %}">Editar</a></td>
+</tr>{% empty %}<tr><td colspan="9" class="empty-state">No hay empresas con esos filtros. <a href="{% url 'bitacora:empresa_nueva' %}">Agregar empresa</a></td></tr>{% endfor %}
+</tbody></table></div><div class="table-summary">{{ resultados_exportados }} resultado{% if resultados_exportados != 1 %}s{% endif %} (vista limitada a 200)</div>

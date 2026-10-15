@@ -47,6 +47,12 @@ Una empresa puede registrar:
 
 El sistema debe permitir distinguir cuál es el contacto principal.
 
+Al importar una carga, se consultan todas sus fuentes de contacto. Se prioriza el contacto actualizado y se completan los vacíos con EDO 2025, EDO 2024 y los canales de empresa, directorio base y SUNAFIL. El nombre y el cargo se mantienen asociados a la misma persona; no se combinan cargos de informantes distintos. Se conserva la procedencia por atributo, además de los originales y canales adicionales. La importación no confirma contactos ni acredita llamadas o envíos.
+
+Un registro nuevo con algún canal de contacto se inicializa como «Por contactar»; sin canales, como «Sin datos / En búsqueda». Las recargas conservan los estados ya gestionados. La corrección de la carga inicial puede ajustar únicamente los registros que siguen en el estado predeterminado y aún no tienen actividades ni casos de crítica.
+
+El código institucional `0` recibido en la carga se conserva como valor original sin asignarle una equivalencia no definida. La ausencia de una clasificación de situación no indica ausencia de datos de contacto.
+
 Cada informante debe poder registrar su Estado de Contacto (Pendiente, Contactado, No contesta o Número incorrecto) y si su correo está confirmado (Sí o No). Estos datos pertenecen al contacto, no a la empresa en general.
 
 ## 4. Reglas sobre Actividades
@@ -58,6 +64,8 @@ No puede existir una actividad de bitácora sin una empresa asociada.
 ### RN-007 — Toda actividad representa un hecho ocurrido
 
 Una actividad debe registrar una gestión que ya ocurrió.
+
+Para probar la presentación del primer entregable se permite un escenario de demostración en una base de datos separada y expresamente identificada. Sus actividades, estados y casos ilustrativos se etiquetan como simulados tanto en pantalla como en las exportaciones; no se contabilizan como ejecución real. El escenario de tres días solicitado tiene como máximo 20% de empresas con contacto efectivo, sin duplicarlas por cada gestión.
 
 Ejemplos:
 
